@@ -202,8 +202,7 @@ defmodule Drab do
   end
 
   @doc false
-  @spec handle_info(tuple, t) :: {:noreply, t}
-  def handle_info({:EXIT, pid, :normal}, state) do
+  def handle_info({:EXIT, _, :normal}, state) do
     # get exits of the current procces
     {:noreply, state}
   end
@@ -219,7 +218,6 @@ defmodule Drab do
     # subprocess died
     Logger.error("""
     Drab Process #{inspect(pid)} died because of #{inspect(reason)}
-    #{Exception.format_stacktrace(stack)}
     """)
 
     {:noreply, state}
@@ -289,6 +287,7 @@ defmodule Drab do
     end
   end)
 
+  @doc false
   def handle_call(:delete_socket, _from, state) do
     {:stop, :normal, state}
   end
