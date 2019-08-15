@@ -218,6 +218,7 @@ defmodule Drab do
     # subprocess died
     Logger.error("""
     Drab Process #{inspect(pid)} died because of #{inspect(reason)}
+    #{Exception.format_stacktrace(stack)}
     """)
 
     {:noreply, state}
@@ -495,7 +496,10 @@ defmodule Drab do
           message: Drab.Core.encode_js(error)
         )
 
-      {:ok, _} = Drab.Core.exec_js(socket, js)
+      case Drab.Core.exec_js(socket, js) do
+        {:ok, _} -> :ok
+        reason -> Logger.error(inspect(reason))
+      end
     end
 
     :ok

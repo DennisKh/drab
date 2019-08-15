@@ -495,15 +495,21 @@ defmodule Drab.Core do
 
       put_store(socket, :counter, 1)
   """
-  @spec put_store(Phoenix.Socket.t(), atom, term) :: Phoenix.Socket.t()
+  @spec put_store(Phoenix.Socket.t(), atom, term) :: Phoenix.Socket.t() || String.t()
   def put_store(socket, key, value) do
     store = socket |> store() |> Map.merge(%{key => value})
-    {:ok, _} = exec_js(socket, "Drab.set_drab_store_token(\"#{tokenize_store(socket, store)}\")")
+    case exec_js(socket, "Drab.set_drab_store_token(\"#{tokenize_store(socket, store)}\")") do
+      {:ok, _} ->
+        # store the store in Drab server, to have it on terminate
+        save_store(socket, store)
+        socket
 
-    # store the store in Drab server, to have it on terminate
-    save_store(socket, store)
+      reason ->
+        Logger.error(insoect(reason))
+        reason
+    end
 
-    socket
+
   end
 
   @doc false
@@ -565,8 +571,10 @@ defmodule Drab.Core do
   @doc false
   @spec store(Phoenix.Socket.t()) :: map
   def store(socket) do
-    {:ok, store_token} = exec_js(socket, "Drab.get_drab_store_token()")
-    detokenize_store(socket, store_token)
+    case exec_js(socket, "Drab.get_drab_store_token()") do
+      {:ok, store_token} -> detokenize_store(socket, store_token)
+      reason -> reason
+    end
   end
 
   @doc false
