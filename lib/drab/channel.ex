@@ -92,16 +92,16 @@ defmodule Drab.Channel do
       p = inspect(socket.assigns.__drab_pid)
       pid_string = ~r/#PID<(?<pid>.*)>/ |> Regex.named_captures(p) |> Map.get("pid")
 
-      IO.puts("""
-
-          Started Drab for #{socket.topic}, handling events in #{inspect(commander)}
-          You may debug Drab functions in IEx by copy/paste the following:
-      import Drab.{#{grouped}}
-      socket = Drab.get_socket(pid("#{pid_string}"))
-
-          Examples:
-      #{Enum.join(examples, "\n")}
-      """)
+      # IO.puts("""
+      #
+      #     Started Drab for #{socket.topic}, handling events in #{inspect(commander)}
+      #     You may debug Drab functions in IEx by copy/paste the following:
+      # import Drab.{#{grouped}}
+      # socket = Drab.get_socket(pid("#{pid_string}"))
+      #
+      #     Examples:
+      # #{Enum.join(examples, "\n")}
+      # """)
     end
 
     session = Drab.Core.detokenize_store(socket, payload["drab_session_token"])
