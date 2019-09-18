@@ -102,6 +102,7 @@ defmodule Drab.Channel do
       #     Examples:
       # #{Enum.join(examples, "\n")}
       # """)
+      :ok
     end
 
     session = Drab.Core.detokenize_store(socket, payload["drab_session_token"])
