@@ -60,37 +60,37 @@ defmodule Drab.Channel do
 
   def handle_in("onconnect", payload, socket) do
     # for debugging
-    if IEx.started?() do
-      commander = Drab.get_commander(socket)
-      modules = DrabModule.all_modules_for(commander.__drab__().modules)
-
-      grouped =
-        modules
-        |> Enum.map(fn module ->
-          [_ | rest] = Module.split(module)
-          Enum.join(rest, ".")
-        end)
-        |> Enum.join(", ")
-
-      live_example = %{Drab.Live => "socket |> poke(text: \"This assign has been drabbed!\")"}
-
-      other_examples = %{
-        Drab.Element => "socket |> set_style(\"body\", backgroundColor: \"red\")",
-        Drab.Query => "socket |> select(:htmls, from: \"h4\")",
-        Drab.Modal =>
-          "socket |> alert(\"Title\", \"Sure?\", buttons: [ok: \"Azaliż\", cancel: \"Poniechaj\"])",
-        Drab.Core => "socket |> exec_js(\"alert('hello from IEx!')\")"
-      }
-
-      module_examples = Map.merge(live_example, other_examples)
-
-      examples =
-        modules
-        |> Enum.map(fn module -> module_examples[module] end)
-        |> Enum.filter(fn x -> !is_nil(x) end)
-
-      p = inspect(socket.assigns.__drab_pid)
-      pid_string = ~r/#PID<(?<pid>.*)>/ |> Regex.named_captures(p) |> Map.get("pid")
+    # if IEx.started?() do
+    #   commander = Drab.get_commander(socket)
+    #   modules = DrabModule.all_modules_for(commander.__drab__().modules)
+    #
+    #   grouped =
+    #     modules
+    #     |> Enum.map(fn module ->
+    #       [_ | rest] = Module.split(module)
+    #       Enum.join(rest, ".")
+    #     end)
+    #     |> Enum.join(", ")
+    #
+    #   live_example = %{Drab.Live => "socket |> poke(text: \"This assign has been drabbed!\")"}
+    #
+    #   other_examples = %{
+    #     Drab.Element => "socket |> set_style(\"body\", backgroundColor: \"red\")",
+    #     Drab.Query => "socket |> select(:htmls, from: \"h4\")",
+    #     Drab.Modal =>
+    #       "socket |> alert(\"Title\", \"Sure?\", buttons: [ok: \"Azaliż\", cancel: \"Poniechaj\"])",
+    #     Drab.Core => "socket |> exec_js(\"alert('hello from IEx!')\")"
+    #   }
+    #
+    #   module_examples = Map.merge(live_example, other_examples)
+    #
+    #   examples =
+    #     modules
+    #     |> Enum.map(fn module -> module_examples[module] end)
+    #     |> Enum.filter(fn x -> !is_nil(x) end)
+    #
+    #   p = inspect(socket.assigns.__drab_pid)
+    #   pid_string = ~r/#PID<(?<pid>.*)>/ |> Regex.named_captures(p) |> Map.get("pid")
 
       # IO.puts("""
       #
@@ -102,8 +102,7 @@ defmodule Drab.Channel do
       #     Examples:
       # #{Enum.join(examples, "\n")}
       # """)
-      :ok
-    end
+    # end
 
     session = Drab.Core.detokenize_store(socket, payload["drab_session_token"])
     socket = assign(socket, :__session, session)
