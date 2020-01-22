@@ -557,7 +557,10 @@ defmodule Drab do
   end)
 
   def delete_socket(pid) do
-    GenServer.stop(pid, :normal)
+    case Process.alive?(pid) do
+      true -> GenServer.stop(pid, :normal)
+      _ -> :ok
+    end
   end
 
   @doc false

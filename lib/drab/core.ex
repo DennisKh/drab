@@ -536,7 +536,7 @@ defmodule Drab.Core do
   @doc false
   @spec delete_socket(Phoenix.Socket.t()) :: :ok
   def delete_socket(socket) do
-    Drab.delete_socket(Drab.pid(socket))
+    delete_socket(Drab.pid(socket))
   end
 
   @doc """
