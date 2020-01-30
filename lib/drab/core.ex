@@ -527,10 +527,7 @@ defmodule Drab.Core do
   @doc false
   @spec delete_socket(pid) :: :ok
   def delete_socket(pid) when is_pid(pid) do
-    case Process.alive?(pid) do
-      true -> Drab.delete_socket(pid)
-      false -> :ok
-    end
+    Drab.delete_socket(pid)
   end
 
   @doc false
